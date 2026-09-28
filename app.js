@@ -15,14 +15,23 @@ app.get('/api/lokasi', async (req, res) => {
     const url = `https://api.maptiler.com/geocoding/${encodeURIComponent(kota)}.json?key=${apiKey}`;
 
     try {
-        const response = await axios.get(url);
+                const fitur = data.features[0];
+        const context = fitur.context || [];
 
-        const data = response.data;
+        const cari = (tipe) => {
+            const hasil = context.find(c => c.id.startsWith(tipe));
+            return hasil ? hasil.text : '-';
+        };
+
+        console.log(context);
 
         res.json({
-            kota: data.features[0].text,
-            koordinat: data.features[0].geometry.coordinates
-        });
+            negara: cari('country'),
+            provinsi: cari('region'),
+            kecamatan: cari('municipality'),
+            longitude: fitur.geometry.coordinates[0],
+            latitude: fitur.geometry.coordinates[1]
+      });
     } catch (error) {
         console.error(error.message);
 
@@ -35,5 +44,4 @@ app.get('/api/lokasi', async (req, res) => {
 app.listen(PORT, () => {
     console.log(`Server berjalan di http://localhost:${PORT}`);
 });
-
 
