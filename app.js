@@ -10,20 +10,29 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.get('/api/lokasi', async (req, res) => {
     const kota = req.query.kota;
 
-    const apiKey = "TmW3n2IbOKaZxkghOoYB";
+    const apiKey = "ISI_API_KEY_BARU_KAMU";
 
-    const url = `https://api.maptiler.com/geocoding/${encodeURIComponent(kota)}.json?key=${apiKey}`;
+    const url = `https://api.maptiler.com/geocoding/${encodeURIComponent(kota)}.json?key=${apiKey}&language=id`;
 
     try {
-                const fitur = data.features[0];
+        const response = await axios.get(url);
+
+        const data = response.data;
+
+        if (data.features.length === 0) {
+            return res.status(404).json({ error: 'Lokasi tidak ditemukan' });
+        }
+
+        const fitur = data.features[0];
         const context = fitur.context || [];
 
+        // cari wilayah berdasarkan tipe id-nya (country, region, dst)
         const cari = (tipe) => {
             const hasil = context.find(c => c.id.startsWith(tipe));
             return hasil ? hasil.text : '-';
         };
 
-        console.log(context);
+        console.log(context); // cek tipe wilayah yang tersedia
 
         res.json({
             negara: cari('country'),
@@ -31,7 +40,7 @@ app.get('/api/lokasi', async (req, res) => {
             kecamatan: cari('municipality'),
             longitude: fitur.geometry.coordinates[0],
             latitude: fitur.geometry.coordinates[1]
-      });
+        });
     } catch (error) {
         console.error(error.message);
 
@@ -44,4 +53,3 @@ app.get('/api/lokasi', async (req, res) => {
 app.listen(PORT, () => {
     console.log(`Server berjalan di http://localhost:${PORT}`);
 });
-
