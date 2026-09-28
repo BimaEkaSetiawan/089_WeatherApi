@@ -9,19 +9,29 @@
     <h3>Nama : bima eka setiawan</h3>
     <h3>NIM : 20240140089</h3>
 
+        <p>
+        Lokasi :
+        <input type="text" id="input" placeholder="contoh: Kasihan, Bantul">
+        <button onclick="cari()">Cari</button>
+    </p>
+
     <p>Kota : <span id="lokasi"></span></p>
     <p>Koordinat : <span id="koordinat"></span></p>
 
     <script>
-        fetch("/api/lokasi")
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById("lokasi").innerHTML = data.kota;
-                document.getElementById("koordinat").innerHTML = data.koordinat;
-            })
-            .catch(error => {
-                console.error(error);
-            });
+        function cari() {
+            const kota = document.getElementById("input").value;
+
+            fetch("/api/lokasi?kota=" + encodeURIComponent(kota))
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("lokasi").innerHTML = data.kota;
+                    document.getElementById("koordinat").innerHTML = data.koordinat;
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        }
     </script>
 </body>
 </html>
