@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geolocation</title>
+</head>
+<body>
+    <h3>Nama : bima eka setiawan</h3>
+    <h3>NIM : 20240140089</h3>
+
+    <p>Kota : <span id="lokasi"></span></p>
+    <p>Koordinat : <span id="koordinat"></span></p>
+
+    <script>
+        fetch("/api/lokasi")
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("lokasi").innerHTML = data.kota;
+                document.getElementById("koordinat").innerHTML = data.koordinat;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
+</body>
+</html>
