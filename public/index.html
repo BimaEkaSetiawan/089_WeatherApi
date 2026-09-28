@@ -4,19 +4,60 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Geolocation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0f2027, #2c5364);
+            color: white;
+            display: flex;
+            justify-content: center;
+            padding: 40px;
+        }
+        .box {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 16px;
+            width: 400px;
+        }
+        input {
+            padding: 10px;
+            width: 65%;
+            border-radius: 8px;
+            border: none;
+        }
+        button {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            background: #00c9ff;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover { background: #92fe9d; }
+        hr { margin: 16px 0; opacity: 0.3; }
+    </style>
 </head>
 <body>
-    <h3>Nama : bima eka setiawan</h3>
-    <h3>NIM : 20240140089</h3>
+    <div class="box">
+        <h3>Nama : Nama Kamu</h3>
+        <h3>NIM : 123456789</h3>
+
+        <hr>
 
         <p>
-        Lokasi :
-        <input type="text" id="input" placeholder="contoh: Kasihan, Bantul">
-        <button onclick="cari()">Cari</button>
-    </p>
+            Lokasi :
+            <input type="text" id="input" placeholder="contoh: Kasihan, Bantul">
+            <button onclick="cari()">Cari</button>
+        </p>
 
-    <p>Kota : <span id="lokasi"></span></p>
-    <p>Koordinat : <span id="koordinat"></span></p>
+        <hr>
+
+        <p>Negara : <span id="negara"></span></p>
+        <p>Provinsi : <span id="provinsi"></span></p>
+        <p>Kecamatan : <span id="kecamatan"></span></p>
+        <p>Longitude : <span id="longitude"></span></p>
+        <p>Latitude : <span id="latitude"></span></p>
+    </div>
 
     <script>
         function cari() {
@@ -25,9 +66,20 @@
             fetch("/api/lokasi?kota=" + encodeURIComponent(kota))
                 .then(response => response.json())
                 .then(data => {
-                    document.getElementById("lokasi").innerHTML = data.kota;
-                    document.getElementById("koordinat").innerHTML = data.koordinat;
+                    console.log(data);
+
+                    if (data.error) {
+                        alert(data.error);
+                        return;
+                    }
+
+                    document.getElementById("negara").innerHTML = data.negara;
+                    document.getElementById("provinsi").innerHTML = data.provinsi;
+                    document.getElementById("kecamatan").innerHTML = data.kecamatan;
+                    document.getElementById("longitude").innerHTML = data.longitude;
+                    document.getElementById("latitude").innerHTML = data.latitude;
                 })
+
                 .catch(error => {
                     console.error(error);
                 });
