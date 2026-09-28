@@ -10,7 +10,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.get('/api/lokasi', async (req, res) => {
     const kota = req.query.kota;
 
-    const apiKey = "ISI_API_KEY_BARU_KAMU";
+    const apiKey = "TmW3n2IbOKaZxkghOoYB";
 
     const url = `https://api.maptiler.com/geocoding/${encodeURIComponent(kota)}.json?key=${apiKey}&language=id`;
 
